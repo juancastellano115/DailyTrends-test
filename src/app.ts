@@ -13,6 +13,11 @@ import { dbConnection } from '@database';
 import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+const { createBullBoard } = require('@bull-board/api');
+const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
+const { ExpressAdapter } = require('@bull-board/express');
+import { scraperQueue } from '@/queues/scraper.queue';
+import { initializeScraperQueue } from '@/queues';
 
 export class App {
   public app: express.Application;
@@ -29,6 +34,7 @@ export class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    this.initializeQueues();
   }
 
   public listen() {
@@ -83,5 +89,20 @@ export class App {
 
   private initializeErrorHandling() {
     this.app.use(ErrorMiddleware);
+  }
+
+  private async initializeQueues() {
+    const serverAdapter = new ExpressAdapter();
+    serverAdapter.setBasePath('/bull');
+
+    createBullBoard({
+      queues: [new BullMQAdapter(scraperQueue)],
+      serverAdapter,
+    });
+
+    this.app.use('/bull', serverAdapter.getRouter());
+
+    // Add the repeating jobs
+    initializeScraperQueue();
   }
 }

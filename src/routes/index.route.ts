@@ -12,7 +12,6 @@ export class IndexRoute implements Routes {
   }
 
   private initializeRoutes() {
-   
     this.router.get(`${this.path}`, (req, res) => {
       res.send('Hello NextLane!');
     });
