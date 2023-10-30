@@ -46,6 +46,14 @@ services:
     networks:
       - backend
 
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge
