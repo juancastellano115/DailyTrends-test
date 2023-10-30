@@ -16,8 +16,8 @@ import { logger, stream } from '@utils/logger';
 const { createBullBoard } = require('@bull-board/api');
 const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
-import { scraperQueue } from '@/queues/scraper.queue';
-import { initializeScraperQueue } from '@/queues';
+import { scraperElMundoQueue, scraperElPaisQueue } from '@/queues/scraper.queue';
+import { initializeScraperElMundoQueue, initializeScraperElPaisQueue } from '@/queues';
 
 export class App {
   public app: express.Application;
@@ -96,13 +96,14 @@ export class App {
     serverAdapter.setBasePath('/bull');
 
     createBullBoard({
-      queues: [new BullMQAdapter(scraperQueue)],
+      queues: [new BullMQAdapter(scraperElMundoQueue), new BullMQAdapter(scraperElPaisQueue)],
       serverAdapter,
     });
 
     this.app.use('/bull', serverAdapter.getRouter());
 
     // Add the repeating jobs
-    initializeScraperQueue();
+    await initializeScraperElMundoQueue();
+    await initializeScraperElPaisQueue();
   }
 }

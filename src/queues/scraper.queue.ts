@@ -2,27 +2,30 @@ import { QueueEventsOptions } from './../../node_modules/bullmq/dist/esm/interfa
 import type { Processor, QueueOptions } from 'bullmq';
 import { QueueEvents } from 'bullmq';
 import { Queue, Worker } from 'bullmq';
-import { scrapeNews } from '@/lib/scraper.lib';
+import { ElMundoScraper, ElPaisScraper } from '@/lib/scraper.lib';
+import { logger } from '@utils/logger';
 
 type AugmentedQueue<T> = Queue<T> & {
   events: QueueEvents;
 };
-type RegisteredQueue = {
-  queue: Queue;
-  queueEvents: QueueEvents;
-  worker: Worker;
-};
-declare global {
-  var __registeredQueues: Record<string, RegisteredQueue> | undefined;
-}
-const redisOptions = {
-  port: process.env.REDIS_PORT || 6379,
-  host: process.env.REDIS_HOST || 'localhost',
-  password: process.env.REDIS_PASSWORD || '',
-  tls: process.env.REDIS_TLS || false,
+
+type jobData = {
+  url: string;
+  provider: string;
 };
 
-const registeredQueues = global.__registeredQueues || (global.__registeredQueues = {});
+const redisOptions = {
+  port: Number.parseInt(process.env.REDIS_PORT) || 6379,
+  host: process.env.REDIS_HOST || 'localhost',
+  password: process.env.REDIS_PASSWORD || '',
+  tls: !!process.env.REDIS_TLS,
+};
+
+// Initialize scraper classes
+const elMundoScraper = new ElMundoScraper();
+const elPaisScraper = new ElPaisScraper();
+
+const registeredQueues = {};
 /**
  *
  * @param name Unique name of the queue
@@ -35,6 +38,7 @@ export function registerQueue<T>(name: string, processor: Processor<T>) {
     const worker = new Worker<T>(name, processor, {
       lockDuration: 1000 * 60 * 15,
       concurrency: 8,
+      connection: redisOptions as QueueOptions,
     });
     registeredQueues[name] = {
       queue,
@@ -47,8 +51,16 @@ export function registerQueue<T>(name: string, processor: Processor<T>) {
   return queue;
 }
 
-export const scraperQueue = registerQueue('scraper', async (job: { data: { url: string } }) => {
-  const { url } = job.data;
-  const data = await scrapeNews(url);
-  console.log(data);
+export const scraperElMundoQueue = registerQueue('scraper-el-mundo', async (job: { data: jobData }) => {
+  const { url, provider } = job.data;
+  logger.info(`Scraping data from ${url}`);
+  const data = await elMundoScraper.scrapeNews(url, provider);
+  logger.info(`Scraped ${data.length} news from ${provider}`);
+});
+
+export const scraperElPaisQueue = registerQueue('scraper-el-pais', async (job: { data: jobData }) => {
+  const { url, provider } = job.data;
+  logger.info(`Scraping data from ${url}`);
+  const data = await elPaisScraper.scrapeNews(url, provider);
+  logger.info(`Scraped ${data.length} news from ${provider}`);
 });
