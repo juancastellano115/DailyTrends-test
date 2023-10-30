@@ -1,3 +1,8 @@
 export interface Feed {
-  _id?: string;
+  heading: string;
+  author?: string;
+  subHeading?: string;
+  link: string;
+  image?: string;
+  provider?: string;
 }

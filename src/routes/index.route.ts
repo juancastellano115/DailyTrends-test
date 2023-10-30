@@ -1,7 +1,5 @@
 import { Router } from 'express';
-import { CreateFeedDto } from '@/dtos/feed.dto';
 import { Routes } from '@interfaces/routes.interface';
-import { ValidationMiddleware } from '@middlewares/validation.middleware';
 
 export class IndexRoute implements Routes {
   public path = '/';
@@ -13,7 +11,7 @@ export class IndexRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, (req, res) => {
-      res.send('Hello NextLane!');
+      res.send('Hello Muchosol!');
     });
   }
 }

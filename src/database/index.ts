@@ -1,4 +1,4 @@
-import { ConnectOptions, connect, set } from 'mongoose';
+import mongoose, { ConnectOptions, connect, set } from 'mongoose';
 import { NODE_ENV, DB_HOST, DB_PORT, DB_DATABASE } from '@config';
 
 export const dbConnection = async () => {
@@ -9,6 +9,8 @@ export const dbConnection = async () => {
       useUnifiedTopology: true,
     },
   };
+
+  mongoose.set('strictQuery', false);
 
   if (NODE_ENV !== 'production') {
     set('debug', true);
