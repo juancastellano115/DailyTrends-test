@@ -92,6 +92,9 @@ export class App {
   }
 
   private async initializeQueues() {
+    if (process.env.NODE_ENV === 'test') {
+      return 'Test environment, skipping queues initialization';
+    }
     const serverAdapter = new ExpressAdapter();
     serverAdapter.setBasePath('/bull');
 

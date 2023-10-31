@@ -1,3 +1,3 @@
-# NextLane dailyTrends test
+# Muchosol dailyTrends test
 
 `TODO: README.md`
