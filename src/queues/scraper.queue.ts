@@ -4,7 +4,7 @@ import { QueueEvents } from 'bullmq';
 import { Queue, Worker } from 'bullmq';
 import { ElMundoScraper, ElPaisScraper } from '@/lib/scraper.lib';
 import { logger } from '@utils/logger';
-
+import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from 'config';
 type AugmentedQueue<T> = Queue<T> & {
   events: QueueEvents;
 };
@@ -15,9 +15,9 @@ type jobData = {
 };
 
 const redisOptions = {
-  port: Number.parseInt(process.env.REDIS_PORT) || 6379,
-  host: process.env.REDIS_HOST || 'localhost',
-  password: process.env.REDIS_PASSWORD || '',
+  port: Number.parseInt(REDIS_PORT) || 6379,
+  host: REDIS_HOST || 'localhost',
+  password: REDIS_PASSWORD || '',
   tls: !!process.env.REDIS_TLS,
 };
 

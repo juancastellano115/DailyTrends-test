@@ -1,7 +1,7 @@
 {
   "name": "dailytrends-test",
   "version": "0.0.0",
-  "description": "TypeScript + Mongoose + MongoDB + Express API Server",
+  "description": "Backend API Server for DailyTrends",
   "author": "",
   "license": "ISC",
   "scripts": {
