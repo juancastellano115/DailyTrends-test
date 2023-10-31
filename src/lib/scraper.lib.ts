@@ -37,7 +37,7 @@ export abstract class Scraper {
    * @param {string} provider - The provider to scrape news from.
    * @returns {Promise<Feed[]>} - A promise that resolves to an array of Feed objects.
    */
-  public async scrapeNews(url, provider): Promise<Feed[]> {
+  public async scrapeNews(url: string, provider: string): Promise<Feed[]> {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
     const html = iconv.decode(Buffer.from(response.data), this.encondings[provider]);
     const $ = load(html);
@@ -54,8 +54,11 @@ export abstract class Scraper {
       }
     }
 
-    await feedModel.insertMany(this.articles.map(article => ({ ...article, provider: provider })));
-    return this.articles;
+    const articlesToInsert = this.articles.map(article => ({ ...article, provider: provider }));
+    await feedModel.insertMany(articlesToInsert);
+
+    this.articles = [];
+    return articlesToInsert;
   }
   /**
    * Extracts articles from a CheerioAPI object.
