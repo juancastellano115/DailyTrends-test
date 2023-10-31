@@ -6,7 +6,7 @@ El stack de esta aplicación es: Node + Typescript + Mongo DB.
 
 ## Arquitectura
 
-<img src="https://media.discordapp.net/attachments/720642232008573089/1168903270157263009/Captura_de_pantalla_2023-10-31_141746.png?ex=65537500&is=65410000&hm=7694772ae9650a8d5b15c05b5c0916843ad93d8c7f20a26caa3164b7da2fac1f&=&width=1610&height=904"/>
+<img src="https://media.discordapp.net/attachments/720642232008573089/1168904137052790864/image.png?ex=655375cf&is=654100cf&hm=9a582a83471a198c7a959670b2787cc49d1e00eb809244025bb1749f222953ae&=&width=1615&height=905"/>
 
 ## Instrucciones
 
