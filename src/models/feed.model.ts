@@ -77,7 +77,7 @@ class FeedModelWrapper {
    * @returns A Promise that resolves to an array of feed documents.
    */
   public async findAll(skip: number, limit: number): Promise<(Feed & Document)[]> {
-    return FeedModel.find().skip(skip).limit(limit).exec();
+    return FeedModel.find().skip(skip).limit(limit).sort({ createdAt: -1 }).exec();
   }
 
   /**
