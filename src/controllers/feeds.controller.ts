@@ -9,7 +9,7 @@ import { RedisClientType } from 'redis';
  * Controller for handling feed-related HTTP requests.
  */
 export class FeedController {
-  public feed = Container.get(FeedService);
+  public feedService = Container.get(FeedService);
   private cache: RedisClientType;
   constructor() {
     (async () => {
@@ -34,7 +34,7 @@ export class FeedController {
         const parsedData = JSON.parse(cachedFeeds);
         return res.status(200).json({ data: parsedData, message: 'cached-findAll' });
       }
-      const findAllFeedsData: Feed[] = await this.feed.findAllFeeds(skip, limit);
+      const findAllFeedsData: Feed[] = await this.feedService.findAllFeeds(skip, limit);
       await this.cache.setEx(requestId, REDIS_EXPIRATION_TIME, JSON.stringify(findAllFeedsData));
       res.status(200).json({ data: findAllFeedsData, message: 'findAll' });
     } catch (error) {
@@ -58,7 +58,7 @@ export class FeedController {
         const parsedData = JSON.parse(cachedFeed);
         return res.status(200).json({ data: parsedData, message: 'cached-findOne' });
       }
-      const findOneFeedData: Feed = await this.feed.findFeedById(feedId);
+      const findOneFeedData: Feed = await this.feedService.findFeedById(feedId);
       if (!findOneFeedData) {
         return res.status(404).json({ message: 'Feed not found' });
       }
@@ -79,7 +79,7 @@ export class FeedController {
   public createFeed = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const feedData: Feed = req.body;
-      const createFeedData: Feed = await this.feed.createFeed(feedData);
+      const createFeedData: Feed = await this.feedService.createFeed(feedData);
 
       res.status(201).json({ data: createFeedData, message: 'created' });
     } catch (error) {
@@ -99,7 +99,7 @@ export class FeedController {
     try {
       const feedId: string = req.params.id;
       const FeedData: Feed = req.body;
-      const updateFeedData: Feed = await this.feed.updateFeed(feedId, FeedData);
+      const updateFeedData: Feed = await this.feedService.updateFeed(feedId, FeedData);
 
       res.status(200).json({ data: updateFeedData, message: 'updated' });
     } catch (error) {
@@ -118,7 +118,7 @@ export class FeedController {
   public deleteFeed = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const feedId: string = req.params.id;
-      const deleteFeedData: Feed = await this.feed.deleteFeed(feedId);
+      const deleteFeedData: Feed = await this.feedService.deleteFeed(feedId);
 
       res.status(200).json({ data: deleteFeedData, message: 'deleted' });
     } catch (error) {
