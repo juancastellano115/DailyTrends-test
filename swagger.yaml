@@ -1,1 +1,132 @@
-# TODO: implement swagger.yaml
+tags:
+- name: feeds
+  description: feeds API
+
+paths:
+# [GET] feeds
+  /feeds:
+    get:
+      tags:
+      - feeds
+      summary: Find All Feeds
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+# [POST] feeds
+    post:
+      tags:
+      - feeds
+      summary: Add Feed
+      parameters:
+      - name: body
+        in: body
+        description: feed Data
+        required: true
+        schema:
+          $ref: '#/definitions/feeds'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [GET] feeds/id
+  /feeds/{id}:
+    get:
+      tags:
+      - feeds
+      summary: Find Feed By Id
+      parameters:
+      - name: id
+        in: path
+        description: Feed Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [PUT] feeds/id
+    put:
+      tags:
+      - feeds
+      summary: Update Feed By Id
+      parameters:
+      - name: id
+        in: path
+        description: feed Id
+        required: true
+      - name: body
+        in: body
+        description: feed Data
+        required: true
+        schema:
+          $ref: '#/definitions/feeds'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# [DELETE] feeds/id
+    delete:
+      tags:
+      - feeds
+      summary: Delete Feed By Id
+      parameters:
+      - name: id
+        in: path
+        description: feed Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+# definitions
+definitions:
+  feeds:
+    type: object
+    required:
+        - heading
+        - provider
+    properties:
+      heading:
+        type: string
+        description: feed heading
+      subHeading:
+        type: string
+        description: feed subHeading
+      author:
+        type: string
+        description: feed author
+      link:
+        type: string
+        description: feed link
+      image:
+        type: string
+        description: feed image
+      provider:
+        type: string
+        description: feed provider
+
+schemes:
+ - https
+ - http
