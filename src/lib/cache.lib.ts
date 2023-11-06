@@ -1,7 +1,7 @@
 import type { RedisClientType } from 'redis';
 import { createClient } from 'redis';
 import { logger } from '../utils/logger';
-import { REDIS_URL } from 'config';
+import { REDIS_URL } from '@config';
 
 let redisClient: RedisClientType;
 let isReady: boolean;

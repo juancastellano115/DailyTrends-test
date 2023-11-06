@@ -1,5 +1,5 @@
 import { scraperElMundoQueue, scraperElPaisQueue } from './scraper.queue';
-import { URL_EL_MUNDO, URL_EL_PAIS } from 'config';
+import { URL_EL_MUNDO, URL_EL_PAIS } from '@config';
 
 const jobScheduleMap = {
   'scraper-el-mundo': '*/5 * * * *',

@@ -4,7 +4,7 @@ import { QueueEvents } from 'bullmq';
 import { Queue, Worker } from 'bullmq';
 import { ElMundoScraper, ElPaisScraper } from '@/lib/scraper.lib';
 import { logger } from '@utils/logger';
-import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from 'config';
+import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } from '@config';
 type AugmentedQueue<T> = Queue<T> & {
   events: QueueEvents;
 };
